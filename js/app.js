@@ -246,15 +246,18 @@
       'Here is my payment slip:';
     const encoded = encodeURIComponent(message);
 
-    if (data.whatsappNumber) {
-      const digits = data.whatsappNumber.replace(/[^0-9]/g, '');
+    const whatsappNumber = data.whatsappNumber != null ? String(data.whatsappNumber) : '';
+    const viberNumber = data.viberNumber != null ? String(data.viberNumber) : '';
+
+    if (whatsappNumber) {
+      const digits = whatsappNumber.replace(/[^0-9]/g, '');
       els.whatsappBtn.href = 'https://wa.me/' + digits + '?text=' + encoded;
       els.whatsappBtn.hidden = false;
     } else {
       els.whatsappBtn.hidden = true;
     }
 
-    if (data.viberNumber) {
+    if (viberNumber) {
       els.viberBtn.href = 'viber://forward?text=' + encoded;
       els.viberBtn.hidden = false;
     } else {
