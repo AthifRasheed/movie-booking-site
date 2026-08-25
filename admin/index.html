@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Admin Log In</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body>
+<main class="login-wrap">
+  <h1>Admin Log In</h1>
+  <form id="loginForm" novalidate>
+    <div class="field">
+      <label for="username">Username</label>
+      <input type="text" id="username" name="username" autocomplete="username" required>
+    </div>
+    <div class="field">
+      <label for="password">Password</label>
+      <input type="password" id="password" name="password" autocomplete="current-password" required>
+    </div>
+    <p id="loginError" class="field-error" role="alert" hidden></p>
+    <button type="submit" id="loginBtn" class="btn btn-primary btn-block">Log In</button>
+  </form>
+</main>
+
+<script src="/admin/js/shared.js"></script>
+<script src="/admin/js/login.js"></script>
+</body>
+</html>

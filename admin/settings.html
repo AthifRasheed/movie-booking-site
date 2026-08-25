@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Settings — Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body data-page="settings">
+<div id="adminNav"></div>
+
+<main class="admin-main">
+  <h1 class="page-title">Settings</h1>
+
+  <div id="settingsLoading" class="state-message" role="status">Loading…</div>
+
+  <form id="settingsForm" novalidate hidden>
+    <div class="field">
+      <label for="cinemaName">Cinema name</label>
+      <input type="text" id="cinemaName" maxlength="120">
+    </div>
+    <div class="field">
+      <label for="bankAccountName">Bank account name</label>
+      <input type="text" id="bankAccountName" maxlength="120">
+    </div>
+    <div class="field">
+      <label for="bankAccountNumber">Bank account number</label>
+      <input type="text" id="bankAccountNumber" maxlength="60">
+    </div>
+    <div class="field">
+      <label for="bankName">Bank name (optional)</label>
+      <input type="text" id="bankName" maxlength="120">
+    </div>
+    <div class="field">
+      <label for="whatsappNumber">WhatsApp number (with country code, digits only)</label>
+      <input type="text" id="whatsappNumber" maxlength="20" placeholder="e.g. 9607712345">
+    </div>
+    <div class="field">
+      <label for="viberNumber">Viber number</label>
+      <input type="text" id="viberNumber" maxlength="20" placeholder="e.g. +9607712345">
+    </div>
+
+    <p id="settingsError" class="field-error" role="alert" hidden></p>
+    <button type="submit" id="saveSettingsBtn" class="btn btn-primary btn-block">Save Settings</button>
+  </form>
+</main>
+
+<script src="/admin/js/shared.js"></script>
+<script src="/admin/js/nav.js"></script>
+<script src="/admin/js/settings.js"></script>
+</body>
+</html>

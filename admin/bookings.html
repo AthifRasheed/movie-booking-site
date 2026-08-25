@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bookings — Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body data-page="bookings">
+<div id="adminNav"></div>
+
+<main class="admin-main">
+  <h1 class="page-title">Bookings</h1>
+
+  <div class="filters">
+    <input type="text" id="searchInput" placeholder="Search name, phone, or booking ID" style="flex:1 1 200px;">
+    <select id="paymentFilter">
+      <option value="">All payments</option>
+      <option value="Pending">Pending</option>
+      <option value="Paid">Paid</option>
+    </select>
+    <select id="statusFilter">
+      <option value="">All statuses</option>
+      <option value="Confirmed">Confirmed</option>
+      <option value="Cancelled">Cancelled</option>
+      <option value="Expired">Expired</option>
+    </select>
+  </div>
+
+  <div id="bookingsLoading" class="state-message" role="status">Loading…</div>
+  <div id="bookingsError" class="state-message" role="alert" hidden>Could not load bookings.</div>
+  <div id="bookingsEmpty" class="state-message" hidden>No bookings match.</div>
+  <div id="bookingsList"></div>
+</main>
+
+<script src="/admin/js/shared.js"></script>
+<script src="/admin/js/nav.js"></script>
+<script src="/admin/js/bookings.js"></script>
+</body>
+</html>

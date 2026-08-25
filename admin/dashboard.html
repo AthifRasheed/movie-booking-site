@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dashboard — Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body data-page="dashboard">
+<div id="adminNav"></div>
+
+<main class="admin-main">
+  <h1 class="page-title">Dashboard</h1>
+
+  <div class="card">
+    <p class="muted" style="margin:0 0 0.75rem;">Tickets booked vs. capacity, at a glance.</p>
+    <a href="/admin/movies.html" class="btn btn-secondary btn-sm">Manage movies</a>
+    <a href="/admin/bookings.html" class="btn btn-secondary btn-sm">View bookings</a>
+  </div>
+
+  <div id="dashLoading" class="state-message" role="status">Loading…</div>
+  <div id="dashError" class="state-message" role="alert" hidden>Could not load movies.</div>
+  <div id="dashEmpty" class="state-message" hidden>No movies added yet. <a href="/admin/movies.html">Add your first one</a>.</div>
+  <div id="dashList"></div>
+</main>
+
+<script src="/admin/js/shared.js"></script>
+<script src="/admin/js/nav.js"></script>
+<script src="/admin/js/dashboard.js"></script>
+</body>
+</html>

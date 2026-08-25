@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Book Tickets</title>
+<meta name="description" content="Book movie tickets in seconds.">
+<link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<a class="skip-link" href="#main">Skip to content</a>
+
+<header class="site-header">
+  <h1 id="cinemaName" class="site-title">Cinema</h1>
+</header>
+
+<main id="main">
+
+  <section id="view-list" class="view" aria-labelledby="listHeading">
+    <h2 id="listHeading" class="visually-hidden">Now Showing</h2>
+
+    <div id="listLoading" class="state-message" role="status">
+      <div class="spinner" aria-hidden="true"></div>
+      <p>Loading movies…</p>
+    </div>
+
+    <div id="listError" class="state-message state-error" role="alert" hidden>
+      <p>We couldn't load the movie list. Please check your connection.</p>
+      <button type="button" id="retryListBtn" class="btn btn-secondary">Try again</button>
+    </div>
+
+    <div id="listEmpty" class="state-message" hidden>
+      <p>No movies are open for booking right now. Please check back soon.</p>
+    </div>
+
+    <ul id="movieGrid" class="movie-grid" hidden></ul>
+  </section>
+
+  <section id="view-booking" class="view" hidden aria-labelledby="bookingHeading">
+    <button type="button" id="backToListBtn" class="btn-link">&larr; Back to movies</button>
+    <h2 id="bookingHeading" class="visually-hidden">Book Tickets</h2>
+
+    <div class="booking-card">
+      <img id="bookingPoster" class="booking-poster" alt="" width="300" height="450">
+      <div class="booking-details">
+        <h3 id="bookingTitle"></h3>
+        <p id="bookingWhen" class="muted"></p>
+        <p id="bookingSeats" class="muted"></p>
+
+        <form id="bookingForm" novalidate>
+          <div class="field">
+            <span class="field-label" id="ticketCountLabel">Number of tickets</span>
+            <div class="stepper" role="group" aria-labelledby="ticketCountLabel">
+              <button type="button" id="decrementBtn" class="stepper-btn" aria-label="Decrease ticket count">&minus;</button>
+              <output id="ticketCount" for="decrementBtn incrementBtn" aria-live="polite">1</output>
+              <button type="button" id="incrementBtn" class="stepper-btn" aria-label="Increase ticket count">&plus;</button>
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="customerName">Full name</label>
+            <input type="text" id="customerName" name="customerName" autocomplete="name" required maxlength="100">
+          </div>
+
+          <div class="field">
+            <label for="customerPhone">Phone number</label>
+            <input type="tel" id="customerPhone" name="customerPhone" autocomplete="tel" required maxlength="30" placeholder="e.g. 7712345">
+          </div>
+
+          <p id="formError" class="field-error" role="alert" hidden></p>
+
+          <div class="total-row">
+            <span>Total</span>
+            <strong id="totalAmount">MVR 0.00</strong>
+          </div>
+
+          <button type="submit" id="bookNowBtn" class="btn btn-primary btn-large">Book Now</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <section id="view-confirmation" class="view" hidden aria-labelledby="confirmationHeading">
+    <div class="confirmation-card">
+      <div class="confirmation-check" aria-hidden="true">&check;</div>
+      <h2 id="confirmationHeading">Booking Confirmed</h2>
+
+      <dl class="confirmation-list">
+        <div><dt>Booking ID</dt><dd id="confBookingId"></dd></div>
+        <div><dt>Movie</dt><dd id="confMovie"></dd></div>
+        <div><dt>Date &amp; time</dt><dd id="confWhen"></dd></div>
+        <div><dt>Tickets</dt><dd id="confTickets"></dd></div>
+        <div><dt>Total</dt><dd id="confTotal"></dd></div>
+      </dl>
+
+      <div class="pay-box">
+        <h3>Send Payment</h3>
+        <p class="muted">Transfer the total to this account, then send your payment slip using the button below.</p>
+        <dl class="pay-details">
+          <div><dt>Account name</dt><dd id="confBankName"></dd></div>
+          <div>
+            <dt>Account number</dt>
+            <dd>
+              <span id="confBankNumber"></span>
+              <button type="button" id="copyAccountBtn" class="btn-chip">Copy</button>
+            </dd>
+          </div>
+        </dl>
+      </div>
+
+      <div class="send-slip-actions">
+        <a id="whatsappBtn" class="btn btn-whatsapp btn-large" target="_blank" rel="noopener">Send Slip via WhatsApp</a>
+        <a id="viberBtn" class="btn btn-viber btn-large" target="_blank" rel="noopener">Send Slip via Viber</a>
+      </div>
+
+      <button type="button" id="bookAnotherBtn" class="btn-link">Book another movie</button>
+    </div>
+  </section>
+
+</main>
+
+<script src="/js/app.js" defer></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Movies — Admin</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="stylesheet" href="/admin/css/admin.css">
+</head>
+<body data-page="movies">
+<div id="adminNav"></div>
+
+<main class="admin-main">
+  <h1 class="page-title">Movies</h1>
+
+  <button type="button" id="addMovieBtn" class="btn btn-primary btn-block" style="margin-bottom:1rem;">+ Add Movie</button>
+
+  <div class="tabs">
+    <button type="button" class="tab-btn active" data-status="active">Active</button>
+    <button type="button" class="tab-btn" data-status="archived">Archived</button>
+  </div>
+
+  <div id="moviesLoading" class="state-message" role="status">Loading…</div>
+  <div id="moviesError" class="state-message" role="alert" hidden>Could not load movies.</div>
+  <div id="moviesEmpty" class="state-message" hidden>Nothing here yet.</div>
+  <div id="moviesList"></div>
+</main>
+
+<!-- Add / Edit dialog (a simple full-screen panel, not a native <dialog>, for the widest mobile support) -->
+<div id="movieFormPanel" class="form-panel" hidden>
+  <main class="admin-main">
+    <button type="button" id="closeFormBtn" class="btn btn-secondary btn-sm" style="margin-bottom:1rem;">&larr; Back</button>
+    <h1 class="page-title" id="formTitle">Add Movie</h1>
+
+    <form id="movieForm" novalidate>
+      <input type="hidden" id="movieId">
+
+      <div class="field">
+        <label for="posterInput">Poster</label>
+        <img id="posterPreview" class="poster-preview" alt="" hidden>
+        <input type="file" id="posterInput" accept="image/*">
+        <p id="uploadProgress" class="upload-progress" hidden></p>
+        <input type="hidden" id="posterUrl">
+        <input type="hidden" id="posterPublicId">
+      </div>
+
+      <div class="field">
+        <label for="titleInput">Title</label>
+        <input type="text" id="titleInput" required maxlength="120">
+      </div>
+
+      <div class="field">
+        <label for="dateInput">Date</label>
+        <input type="date" id="dateInput" required>
+      </div>
+
+      <div class="field">
+        <label for="timeInput">Time</label>
+        <input type="time" id="timeInput" required>
+      </div>
+
+      <div class="field">
+        <label for="venueInput">Venue (optional)</label>
+        <input type="text" id="venueInput" maxlength="80">
+      </div>
+
+      <div class="field">
+        <label for="priceInput">Price per ticket (MVR)</label>
+        <input type="number" id="priceInput" min="0" step="0.01" required>
+      </div>
+
+      <div class="field">
+        <label for="capacityInput">Total capacity</label>
+        <input type="number" id="capacityInput" min="1" step="1" required>
+      </div>
+
+      <p id="formError" class="field-error" role="alert" hidden></p>
+
+      <button type="submit" id="saveMovieBtn" class="btn btn-primary btn-block">Save Movie</button>
+    </form>
+  </main>
+</div>
+
+<script src="/admin/js/shared.js"></script>
+<script src="/admin/js/nav.js"></script>
+<script src="/admin/js/movies.js"></script>
+</body>
+</html>
