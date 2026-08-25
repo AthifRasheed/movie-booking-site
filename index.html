@@ -11,6 +11,10 @@
 <a class="skip-link" href="#main">Skip to content</a>
 
 <header class="site-header">
+  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+    <path d="M3 8a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2v1a1.5 1.5 0 0 0 0 3v1a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-1a1.5 1.5 0 0 0 0-3V8Z" stroke="currentColor" stroke-width="1.6"/>
+    <path d="M14 6v12" stroke="currentColor" stroke-width="1.6" stroke-dasharray="2.5 2.5"/>
+  </svg>
   <h1 id="cinemaName" class="site-title">Cinema</h1>
 </header>
 
@@ -37,15 +41,19 @@
   </section>
 
   <section id="view-booking" class="view" hidden aria-labelledby="bookingHeading">
-    <button type="button" id="backToListBtn" class="btn-link">&larr; Back to movies</button>
     <h2 id="bookingHeading" class="visually-hidden">Book Tickets</h2>
 
     <div class="booking-card">
-      <img id="bookingPoster" class="booking-poster" alt="" width="300" height="450">
+      <div class="booking-hero">
+        <img id="bookingPoster" class="booking-poster" alt="" width="300" height="450">
+        <button type="button" id="backToListBtn" class="icon-btn-float" aria-label="Back to movies">&larr;</button>
+        <div class="hero-scrim">
+          <h3 id="bookingTitle"></h3>
+          <p id="bookingWhen" class="hero-meta"></p>
+        </div>
+      </div>
       <div class="booking-details">
-        <h3 id="bookingTitle"></h3>
-        <p id="bookingWhen" class="muted"></p>
-        <p id="bookingSeats" class="muted"></p>
+        <p id="bookingSeats" class="seats-chip"></p>
 
         <form id="bookingForm" novalidate>
           <div class="field">
@@ -68,14 +76,17 @@
           </div>
 
           <p id="formError" class="field-error" role="alert" hidden></p>
-
-          <div class="total-row">
-            <span>Total</span>
-            <strong id="totalAmount">MVR 0.00</strong>
-          </div>
-
-          <button type="submit" id="bookNowBtn" class="btn btn-primary btn-large">Book Now</button>
         </form>
+      </div>
+    </div>
+
+    <div class="sticky-bar">
+      <div class="sticky-bar-inner">
+        <div class="sticky-total">
+          <span class="sticky-total-label">Total</span>
+          <strong id="totalAmount">MVR 0.00</strong>
+        </div>
+        <button type="submit" form="bookingForm" id="bookNowBtn" class="btn btn-primary">Book Now</button>
       </div>
     </div>
   </section>
