@@ -98,34 +98,44 @@
     btn.className = 'movie-card-btn';
     btn.disabled = movie.seatsRemaining <= 0;
 
+    const posterWrap = document.createElement('div');
+    posterWrap.className = 'poster-wrap';
+
     const img = document.createElement('img');
     img.className = 'movie-poster';
     img.src = posterVariant(movie.posterUrl, 400) || '';
     img.alt = movie.title + ' poster';
     img.loading = 'lazy';
-    btn.appendChild(img);
-
-    const info = document.createElement('div');
-    info.className = 'movie-info';
-    info.innerHTML =
-      '<h3></h3><p class="movie-meta"></p><p class="movie-price"></p>';
-    info.querySelector('h3').textContent = movie.title;
-    info.querySelector('.movie-meta').textContent = formatWhen(movie.date, movie.time) + (movie.venue ? ' · ' + movie.venue : '');
-    info.querySelector('.movie-price').textContent = money(movie.pricePerTicket);
+    posterWrap.appendChild(img);
 
     if (movie.seatsRemaining <= 0) {
-      const badge = document.createElement('span');
-      badge.className = 'badge badge-soldout';
-      badge.textContent = 'Sold out';
-      info.appendChild(badge);
+      const chip = document.createElement('span');
+      chip.className = 'chip chip-soldout';
+      chip.textContent = 'Sold out';
+      posterWrap.appendChild(chip);
     } else if (movie.seatsRemaining <= 10) {
-      const badge = document.createElement('span');
-      badge.className = 'badge badge-low';
-      badge.textContent = movie.seatsRemaining + ' left';
-      info.appendChild(badge);
+      const chip = document.createElement('span');
+      chip.className = 'chip chip-low';
+      chip.textContent = movie.seatsRemaining + ' left';
+      posterWrap.appendChild(chip);
     }
 
-    btn.appendChild(info);
+    const scrim = document.createElement('div');
+    scrim.className = 'poster-scrim';
+    scrim.innerHTML = '<h3></h3><p class="movie-meta"></p>';
+    scrim.querySelector('h3').textContent = movie.title;
+    scrim.querySelector('.movie-meta').textContent = formatWhen(movie.date, movie.time) + (movie.venue ? ' · ' + movie.venue : '');
+    posterWrap.appendChild(scrim);
+
+    btn.appendChild(posterWrap);
+
+    const cta = document.createElement('div');
+    cta.className = 'card-cta' + (movie.seatsRemaining <= 0 ? ' card-cta-disabled' : '');
+    cta.innerHTML = '<span class="cta-price"></span><span class="cta-label"></span>';
+    cta.querySelector('.cta-price').textContent = money(movie.pricePerTicket);
+    cta.querySelector('.cta-label').textContent = movie.seatsRemaining <= 0 ? 'Sold Out' : 'Book Now →';
+    btn.appendChild(cta);
+
     btn.addEventListener('click', () => openBooking(movie));
     li.appendChild(btn);
     return li;
