@@ -33,10 +33,14 @@ export async function onRequestPost(context) {
       return fail('DEBUG: SESSION_SECRET env var is missing or too short. typeof=' + typeof env.SESSION_SECRET, 500);
     }
 
-    if (username !== env.ADMIN_USERNAME) return fail('Incorrect username or password.', 401);
+    if (username !== env.ADMIN_USERNAME) {
+      return fail('DEBUG: username mismatch. you_sent_len=' + username.length + ' expected_len=' + env.ADMIN_USERNAME.length + ' you_sent="' + username + '" expected="' + env.ADMIN_USERNAME + '"', 401);
+    }
 
     const valid = await verifyPassword(password, env.ADMIN_PASSWORD_HASH);
-    if (!valid) return fail('Incorrect username or password.', 401);
+    if (!valid) {
+      return fail('DEBUG: password mismatch. hash_stored_len=' + env.ADMIN_PASSWORD_HASH.length + ' hash_stored="' + env.ADMIN_PASSWORD_HASH + '"', 401);
+    }
 
     const cookie = await createSessionCookie(env, username);
     return ok({ username }, { headers: { 'Set-Cookie': cookie } });
