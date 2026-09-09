@@ -1,4 +1,4 @@
-(function () {
+﻿(function () {
   'use strict';
 
   const els = {
@@ -15,16 +15,6 @@
     bookingPoster: document.getElementById('bookingPoster'),
     bookingTitle: document.getElementById('bookingTitle'),
     bookingWhen: document.getElementById('bookingWhen'),
-    trailerBtn: document.getElementById('trailerBtn'),
-    trailerModal: document.getElementById('trailerModal'),
-    trailerBackdrop: document.getElementById('trailerBackdrop'),
-    trailerFrame: document.getElementById('trailerFrame'),
-    closeTrailerBtn: document.getElementById('closeTrailerBtn'),
-    trailerBtn: document.getElementById('trailerBtn'),
-    trailerModal: document.getElementById('trailerModal'),
-    trailerBackdrop: document.getElementById('trailerBackdrop'),
-    trailerFrame: document.getElementById('trailerFrame'),
-    closeTrailerBtn: document.getElementById('closeTrailerBtn'),
     bookingForm: document.getElementById('bookingForm'),
     decrementBtn: document.getElementById('decrementBtn'),
     incrementBtn: document.getElementById('incrementBtn'),
@@ -51,17 +41,12 @@
   let ticketCount = 1;
   let submitting = false;
 
-  // Mirrors MAX_TICKETS_PER_PHONE in the Apps Script backend (Utils.gs). This is just a
-  // sane client-side ceiling so the input doesn't invite absurd values — the backend is
-  // the real source of truth and will reject anything over the per-phone total anyway.
   const MAX_TICKETS_PER_BOOKING = 20;
 
   function money(n) {
     return 'MVR ' + Number(n).toFixed(2);
   }
 
-  // Applies a light Cloudinary transformation so posters are served as
-  // compressed, appropriately-sized, auto-format (WebP where supported) images.
   function posterVariant(url, width) {
     if (!url || url.indexOf('/upload/') === -1) return url;
     return url.replace('/upload/', '/upload/f_auto,q_auto,w_' + width + '/');
@@ -122,7 +107,7 @@
     img.loading = 'lazy';
     posterWrap.appendChild(img);
 
-     if (movie.seatsRemaining <= 0) {
+    if (movie.seatsRemaining <= 0) {
       const chip = document.createElement('span');
       chip.className = 'chip chip-soldout';
       chip.textContent = 'Sold out';
@@ -150,84 +135,9 @@
     return li;
   }
 
-    function formatWhen(date, time) {
+  function formatWhen(date, time) {
     return date + ' at ' + time;
   }
-
-  // ---- Trailer popup ----
-    // ---- Trailer popup ----
-
-  function extractYouTubeId(url) {
-    if (!url) return '';
-    const patterns = [
-      /youtu\.be\/([A-Za-z0-9_-]{11})/,
-      /youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})/,
-      /youtube\.com\/embed\/([A-Za-z0-9_-]{11})/,
-      /youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/,
-    ];
-    for (const re of patterns) {
-      const m = url.match(re);
-      if (m) return m[1];
-    }
-    return '';
-  }
-
-  function openTrailer(url) {
-    const videoId = extractYouTubeId(url);
-    if (!videoId) return;
-    els.trailerFrame.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0';
-    els.trailerModal.hidden = false;
-  }
-
-  function closeTrailer() {
-    els.trailerModal.hidden = true;
-    els.trailerFrame.src = '';
-  }
-
-  els.trailerBtn.addEventListener('click', () => {
-    if (selectedMovie && selectedMovie.trailerUrl) openTrailer(selectedMovie.trailerUrl);
-  });
-  els.closeTrailerBtn.addEventListener('click', closeTrailer);
-  els.trailerBackdrop.addEventListener('click', closeTrailer);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !els.trailerModal.hidden) closeTrailer();
-  });
-
-  function extractYouTubeId(url) {
-    if (!url) return '';
-    const patterns = [
-      /youtu\.be\/([A-Za-z0-9_-]{11})/,
-      /youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})/,
-      /youtube\.com\/embed\/([A-Za-z0-9_-]{11})/,
-      /youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/,
-    ];
-    for (const re of patterns) {
-      const m = url.match(re);
-      if (m) return m[1];
-    }
-    return '';
-  }
-
-  function openTrailer(url) {
-    const videoId = extractYouTubeId(url);
-    if (!videoId) return;
-    els.trailerFrame.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0';
-    els.trailerModal.hidden = false;
-  }
-
-  function closeTrailer() {
-    els.trailerModal.hidden = true;
-    els.trailerFrame.src = '';
-  }
-
-  els.trailerBtn.addEventListener('click', () => {
-    if (selectedMovie && selectedMovie.trailerUrl) openTrailer(selectedMovie.trailerUrl);
-  });
-  els.closeTrailerBtn.addEventListener('click', closeTrailer);
-  els.trailerBackdrop.addEventListener('click', closeTrailer);
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && !els.trailerModal.hidden) closeTrailer();
-  });
 
   // ---- Booking view ----
 
@@ -239,8 +149,6 @@
     els.bookingPoster.alt = movie.title + ' poster';
     els.bookingTitle.textContent = movie.title;
     els.bookingWhen.textContent = formatWhen(movie.date, movie.time) + (movie.venue ? ' · ' + movie.venue : '');
-    els.trailerBtn.hidden = !movie.trailerUrl;
-    els.trailerBtn.hidden = !movie.trailerUrl;
     els.customerName.value = '';
     els.customerPhone.value = '';
     els.formError.hidden = true;
