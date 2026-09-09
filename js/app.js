@@ -20,6 +20,11 @@
     trailerBackdrop: document.getElementById('trailerBackdrop'),
     trailerFrame: document.getElementById('trailerFrame'),
     closeTrailerBtn: document.getElementById('closeTrailerBtn'),
+    trailerBtn: document.getElementById('trailerBtn'),
+    trailerModal: document.getElementById('trailerModal'),
+    trailerBackdrop: document.getElementById('trailerBackdrop'),
+    trailerFrame: document.getElementById('trailerFrame'),
+    closeTrailerBtn: document.getElementById('closeTrailerBtn'),
     bookingForm: document.getElementById('bookingForm'),
     decrementBtn: document.getElementById('decrementBtn'),
     incrementBtn: document.getElementById('incrementBtn'),
@@ -150,6 +155,43 @@
   }
 
   // ---- Trailer popup ----
+    // ---- Trailer popup ----
+
+  function extractYouTubeId(url) {
+    if (!url) return '';
+    const patterns = [
+      /youtu\.be\/([A-Za-z0-9_-]{11})/,
+      /youtube\.com\/watch\?v=([A-Za-z0-9_-]{11})/,
+      /youtube\.com\/embed\/([A-Za-z0-9_-]{11})/,
+      /youtube\.com\/shorts\/([A-Za-z0-9_-]{11})/,
+    ];
+    for (const re of patterns) {
+      const m = url.match(re);
+      if (m) return m[1];
+    }
+    return '';
+  }
+
+  function openTrailer(url) {
+    const videoId = extractYouTubeId(url);
+    if (!videoId) return;
+    els.trailerFrame.src = 'https://www.youtube-nocookie.com/embed/' + videoId + '?autoplay=1&rel=0';
+    els.trailerModal.hidden = false;
+  }
+
+  function closeTrailer() {
+    els.trailerModal.hidden = true;
+    els.trailerFrame.src = '';
+  }
+
+  els.trailerBtn.addEventListener('click', () => {
+    if (selectedMovie && selectedMovie.trailerUrl) openTrailer(selectedMovie.trailerUrl);
+  });
+  els.closeTrailerBtn.addEventListener('click', closeTrailer);
+  els.trailerBackdrop.addEventListener('click', closeTrailer);
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && !els.trailerModal.hidden) closeTrailer();
+  });
 
   function extractYouTubeId(url) {
     if (!url) return '';
@@ -197,6 +239,7 @@
     els.bookingPoster.alt = movie.title + ' poster';
     els.bookingTitle.textContent = movie.title;
     els.bookingWhen.textContent = formatWhen(movie.date, movie.time) + (movie.venue ? ' · ' + movie.venue : '');
+    els.trailerBtn.hidden = !movie.trailerUrl;
     els.trailerBtn.hidden = !movie.trailerUrl;
     els.customerName.value = '';
     els.customerPhone.value = '';
