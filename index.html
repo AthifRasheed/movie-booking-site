@@ -46,7 +46,8 @@
     <div class="booking-card">
       <div class="booking-hero">
         <img id="bookingPoster" class="booking-poster" alt="" width="300" height="450">
-        <button type="button" id="backToListBtn" class="icon-btn-float" aria-label="Back to movies">&larr;</button>
+        <button type="button" id="backToListBtn" class="icon-btn-float" aria-label="Back to movies">&larr;</button>        
+        <button type="button" id="trailerBtn" class="trailer-btn" hidden>&#9654; Trailer</button>
         <div class="hero-scrim">
           <h3 id="bookingTitle"></h3>
           <p id="bookingWhen" class="hero-meta"></p>
@@ -140,6 +141,17 @@
   </div>
 </div>
 
+<div id="trailerModal" class="trailer-modal" hidden>
+  <div class="trailer-modal-backdrop" id="trailerBackdrop"></div>
+  <div class="trailer-modal-content">
+    <button type="button" id="closeTrailerBtn" class="trailer-close" aria-label="Close trailer">&times;</button>
+    <div class="trailer-frame-wrap">
+      <iframe id="trailerFrame" src="" title="Movie trailer" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>
+    </div>
+  </div>
+</div>
+
 <script src="/js/app.js" defer></script>
+  <script src="/js/app.js" defer></script>
 </body>
 </html>
