@@ -368,8 +368,7 @@ main { max-width: 640px; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
 }
 .trailer-modal-content {
   position: relative;
-  width: 100%;
-  max-width: 720px;
+  width: min(720px, calc(100vw - 2rem));
 }
 .trailer-frame-wrap {
   position: relative;
@@ -394,6 +393,7 @@ main { max-width: 640px; margin: 0 auto; padding: 1.25rem 1rem 4rem; }
   font-size: 1.4rem;
   display: flex; align-items: center; justify-content: center;
   cursor: pointer;
+  z-index: 10;
 }
 .booking-details { padding: 1.1rem 1.25rem 1.5rem; }
 .seats-chip {
