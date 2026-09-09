@@ -42,6 +42,11 @@
   let ticketCount = 1;
   let submitting = false;
 
+  // Mirrors MAX_TICKETS_PER_PHONE in the Apps Script backend (Utils.gs). This is just a
+  // sane client-side ceiling so the input doesn't invite absurd values — the backend is
+  // the real source of truth and will reject anything over the per-phone total anyway.
+  const MAX_TICKETS_PER_BOOKING = 20;
+
   function money(n) {
     return 'MVR ' + Number(n).toFixed(2);
   }
@@ -164,11 +169,12 @@
   }
 
   function maxTickets() {
-    return Math.min(10, selectedMovie ? selectedMovie.seatsRemaining : 1);
+    return Math.min(MAX_TICKETS_PER_BOOKING, selectedMovie ? selectedMovie.seatsRemaining : 1);
   }
 
   function updateTicketCount() {
-    els.ticketCount.textContent = String(ticketCount);
+    els.ticketCount.value = String(ticketCount);
+    els.ticketCount.max = String(maxTickets());
     els.decrementBtn.disabled = ticketCount <= 1;
     els.incrementBtn.disabled = ticketCount >= maxTickets();
     const total = selectedMovie ? selectedMovie.pricePerTicket * ticketCount : 0;
@@ -180,6 +186,12 @@
   });
   els.incrementBtn.addEventListener('click', () => {
     if (ticketCount < maxTickets()) { ticketCount += 1; updateTicketCount(); }
+  });
+  els.ticketCount.addEventListener('input', () => {
+    let val = parseInt(els.ticketCount.value, 10);
+    if (isNaN(val)) val = 1;
+    ticketCount = Math.max(1, Math.min(maxTickets(), val));
+    updateTicketCount();
   });
 
   els.backToListBtn.addEventListener('click', () => {
