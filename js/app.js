@@ -15,7 +15,6 @@
     bookingPoster: document.getElementById('bookingPoster'),
     bookingTitle: document.getElementById('bookingTitle'),
     bookingWhen: document.getElementById('bookingWhen'),
-    bookingSeats: document.getElementById('bookingSeats'),
     bookingForm: document.getElementById('bookingForm'),
     decrementBtn: document.getElementById('decrementBtn'),
     incrementBtn: document.getElementById('incrementBtn'),
@@ -113,15 +112,10 @@
     img.loading = 'lazy';
     posterWrap.appendChild(img);
 
-    if (movie.seatsRemaining <= 0) {
+     if (movie.seatsRemaining <= 0) {
       const chip = document.createElement('span');
       chip.className = 'chip chip-soldout';
       chip.textContent = 'Sold out';
-      posterWrap.appendChild(chip);
-    } else if (movie.seatsRemaining <= 10) {
-      const chip = document.createElement('span');
-      chip.className = 'chip chip-low';
-      chip.textContent = movie.seatsRemaining + ' left';
       posterWrap.appendChild(chip);
     }
 
@@ -160,7 +154,6 @@
     els.bookingPoster.alt = movie.title + ' poster';
     els.bookingTitle.textContent = movie.title;
     els.bookingWhen.textContent = formatWhen(movie.date, movie.time) + (movie.venue ? ' · ' + movie.venue : '');
-    els.bookingSeats.textContent = movie.seatsRemaining + ' seat(s) remaining';
     els.customerName.value = '';
     els.customerPhone.value = '';
     els.formError.hidden = true;
