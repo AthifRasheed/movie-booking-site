@@ -3,7 +3,7 @@
 // this movie row" — the admin UI just sends whichever fields changed.
 import { ok, fail, callAppsScript, cleanText } from '../../../lib/utils.js';
 
-const EDITABLE_TEXT = ['title', 'posterUrl', 'posterPublicId', 'date', 'time', 'venue'];
+const EDITABLE_TEXT = ['title', 'posterUrl', 'posterPublicId', 'date', 'time', 'venue', 'trailerUrl'];
 const EDITABLE_NUMBER = ['pricePerTicket', 'capacityTotal'];
 
 export async function onRequestPut(context) {
@@ -17,7 +17,7 @@ export async function onRequestPut(context) {
 
   const payload = { id };
   EDITABLE_TEXT.forEach((field) => {
-    if (body[field] !== undefined) payload[field] = cleanText(body[field], field === 'posterUrl' || field === 'posterPublicId' ? 500 : 200);
+        if (body[field] !== undefined) payload[field] = cleanText(body[field], field === 'posterUrl' || field === 'posterPublicId' ? 500 : field === 'trailerUrl' ? 300 : 200);
   });
   EDITABLE_NUMBER.forEach((field) => {
     if (body[field] !== undefined) payload[field] = Number(body[field]);
