@@ -31,6 +31,7 @@ function withSecurityHeaders(response) {
     'Content-Security-Policy',
     "default-src 'self'; img-src 'self' https://res.cloudinary.com data:; " +
     "script-src 'self'; style-src 'self' 'unsafe-inline'; connect-src 'self' https://api.cloudinary.com; " +
+    "frame-src https://www.youtube-nocookie.com https://www.youtube.com; " +
     "frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
   );
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
