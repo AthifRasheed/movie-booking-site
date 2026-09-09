@@ -24,6 +24,7 @@ export async function onRequestPost(context) {
   const venue = cleanText(body.venue, 80);
   const posterUrl = cleanText(body.posterUrl, 500);
   const posterPublicId = cleanText(body.posterPublicId, 200);
+  const trailerUrl = cleanText(body.trailerUrl, 300);
   const pricePerTicket = Number(body.pricePerTicket);
   const capacityTotal = Number(body.capacityTotal);
 
@@ -35,7 +36,7 @@ export async function onRequestPost(context) {
 
   try {
     const data = await callAppsScript(context.env, 'addMovie', {
-      title, date, time, venue, posterUrl, posterPublicId, pricePerTicket, capacityTotal,
+      title, date, time, venue, posterUrl, posterPublicId, trailerUrl, pricePerTicket, capacityTotal,
     });
     return ok(data);
   } catch (err) {
