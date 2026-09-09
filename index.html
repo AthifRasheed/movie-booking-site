@@ -60,7 +60,7 @@
             <span class="field-label" id="ticketCountLabel">Number of tickets</span>
             <div class="stepper" role="group" aria-labelledby="ticketCountLabel">
               <button type="button" id="decrementBtn" class="stepper-btn" aria-label="Decrease ticket count">&minus;</button>
-              <output id="ticketCount" for="decrementBtn incrementBtn" aria-live="polite">1</output>
+              <input type="number" id="ticketCount" inputmode="numeric" min="1" value="1" aria-label="Ticket count">
               <button type="button" id="incrementBtn" class="stepper-btn" aria-label="Increase ticket count">&plus;</button>
             </div>
           </div>
