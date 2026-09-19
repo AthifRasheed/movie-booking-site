@@ -1,4 +1,4 @@
-/* Admin site — same dark navy/gold system as the customer site, denser for tables/forms. */
+﻿/* Admin site — same dark navy/gold system as the customer site, denser for tables/forms. */
 
 :root {
   --bg: #0b0e14;
@@ -214,3 +214,30 @@ textarea { min-height: 80px; }
   overflow-y: auto;
   z-index: 40;
 }
+
+/* ---- Dashboard stat tiles ---- */
+.section-title { font-size: 1.05rem; margin: 0 0 0.9rem; }
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+.stat-tile {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+.stat-value { font-size: 1.6rem; font-weight: 800; }
+.stat-label { font-size: 0.82rem; color: var(--muted); }
+.stat-sub { font-size: 0.85rem; font-weight: 700; margin-top: 0.2rem; }
+.stat-tile-green { border-color: rgba(63,157,91,0.4); }
+.stat-tile-green .stat-value { color: #7ad19a; }
+.stat-tile-green .stat-sub { color: #7ad19a; }
+.stat-tile-red { border-color: rgba(194,59,50,0.4); }
+.stat-tile-red .stat-value { color: #ff8c80; }
+.stat-tile-red .stat-sub { color: #ff8c80; }

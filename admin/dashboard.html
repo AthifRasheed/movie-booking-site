@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -17,6 +17,39 @@
     <p class="muted" style="margin:0 0 0.75rem;">Tickets booked vs. capacity, at a glance.</p>
     <a href="/admin/movies.html" class="btn btn-secondary btn-sm">Manage movies</a>
     <a href="/admin/bookings.html" class="btn btn-secondary btn-sm">View bookings</a>
+  </div>
+
+  <div class="card">
+    <h2 class="section-title">Booking overview</h2>
+
+    <div class="stat-grid">
+      <div class="stat-tile">
+        <span class="stat-value" id="statActiveBookings">—</span>
+        <span class="stat-label">Total active bookings</span>
+      </div>
+    </div>
+
+    <div class="field" style="margin-top:1.1rem;">
+      <label for="statsMovieSelect">Check payment status for a movie</label>
+      <select id="statsMovieSelect">
+        <option value="">Select a movie…</option>
+      </select>
+    </div>
+
+    <div id="statsLoading" class="state-message" role="status" hidden style="padding:1rem;">Loading…</div>
+
+    <div id="movieStats" class="stat-grid" hidden>
+      <div class="stat-tile stat-tile-green">
+        <span class="stat-value" id="statPaidCount">—</span>
+        <span class="stat-label">Paid customers</span>
+        <span class="stat-sub" id="statPaidAmount"></span>
+      </div>
+      <div class="stat-tile stat-tile-red">
+        <span class="stat-value" id="statUnpaidCount">—</span>
+        <span class="stat-label">Non-paid customers</span>
+        <span class="stat-sub" id="statUnpaidAmount"></span>
+      </div>
+    </div>
   </div>
 
   <div id="dashLoading" class="state-message" role="status">Loading…</div>
