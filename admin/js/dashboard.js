@@ -23,10 +23,11 @@
     return bookings.reduce((total, b) => total + (Number(b.totalAmount) || 0), 0);
   }
 
-  // ---- Total active bookings ----
+  // ---- Total active tickets (sum of ticket counts, not booking rows) ----
   apiFetch('/api/admin/bookings?bookingStatus=Confirmed')
     .then((bookings) => {
-      statActiveBookings.textContent = bookings.length;
+      const totalTickets = bookings.reduce((total, b) => total + (Number(b.ticketCount) || 0), 0);
+      statActiveBookings.textContent = totalTickets;
     })
     .catch(() => {
       statActiveBookings.textContent = '—';
