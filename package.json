@@ -1,0 +1,10 @@
+﻿{
+  "name": "movie-booking-site",
+  "private": true,
+  "type": "module",
+  "description": "No build step, no runtime dependencies. This file exists only so Node's built-in test runner can execute the tests in /tests.",
+  "scripts": {
+    "test": "node --test"
+  }
+}
+

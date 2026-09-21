@@ -1,4 +1,4 @@
-// admin/js/shared.js — loaded on every admin page.
+﻿// admin/js/shared.js — loaded on every admin page.
 
 async function apiFetch(url, options = {}) {
   const res = await fetch(url, {
@@ -58,10 +58,11 @@ function posterVariant(url, width) {
   return url.replace('/upload/', '/upload/f_auto,q_auto,w_' + width + '/');
 }
 
-// Uploads a poster file directly to Cloudinary using a signature fetched from our own
-// backend — the browser never sees the Cloudinary API secret.
-async function uploadPoster(file, onProgress) {
-  const sig = await apiFetch('/api/admin/upload-signature', { method: 'POST', body: JSON.stringify({}) });
+// Uploads a file directly to Cloudinary using a signature fetched from our own
+// backend — the browser never sees the Cloudinary API secret. `kind` picks which
+// signed folder to use ('poster' — the default — or 'receipt').
+async function uploadToCloudinary(file, kind, onProgress) {
+  const sig = await apiFetch('/api/admin/upload-signature', { method: 'POST', body: JSON.stringify({ kind }) });
 
   const form = new FormData();
   form.append('file', file);
@@ -82,15 +83,26 @@ async function uploadPoster(file, onProgress) {
       try {
         const res = JSON.parse(xhr.responseText);
         if (xhr.status >= 200 && xhr.status < 300 && res.secure_url) {
-          resolve({ posterUrl: res.secure_url, posterPublicId: res.public_id });
+          resolve({ url: res.secure_url, publicId: res.public_id });
         } else {
-          reject(new Error((res.error && res.error.message) || 'Poster upload failed.'));
+          reject(new Error((res.error && res.error.message) || 'Upload failed.'));
         }
       } catch {
-        reject(new Error('Poster upload failed.'));
+        reject(new Error('Upload failed.'));
       }
     };
-    xhr.onerror = () => reject(new Error('Poster upload failed. Check your connection.'));
+    xhr.onerror = () => reject(new Error('Upload failed. Check your connection.'));
     xhr.send(form);
   });
 }
+
+async function uploadPoster(file, onProgress) {
+  const res = await uploadToCloudinary(file, 'poster', onProgress);
+  return { posterUrl: res.url, posterPublicId: res.publicId };
+}
+
+async function uploadReceipt(file, onProgress) {
+  const res = await uploadToCloudinary(file, 'receipt', onProgress);
+  return { receiptUrl: res.url, receiptPublicId: res.publicId };
+}
+

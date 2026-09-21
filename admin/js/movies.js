@@ -100,6 +100,12 @@
     archiveBtn.addEventListener('click', () => updateMovie(movie.id, { status: movie.status === 'archived' ? 'active' : 'archived' }, archiveBtn));
     actions.appendChild(archiveBtn);
 
+    const financesLink = document.createElement('a');
+    financesLink.className = 'btn btn-secondary btn-sm';
+    financesLink.href = '/admin/expenses.html?movie=' + encodeURIComponent(movie.id);
+    financesLink.textContent = 'Finances';
+    actions.appendChild(financesLink);
+
     row.appendChild(body);
     return row;
   }
@@ -137,6 +143,7 @@
       document.getElementById('dateInput').value = movie.date || '';
       document.getElementById('timeInput').value = movie.time || '';
       document.getElementById('venueInput').value = movie.venue || '';
+      document.getElementById('trailerInput').value = movie.trailerUrl || '';
       document.getElementById('priceInput').value = movie.pricePerTicket || '';
       document.getElementById('capacityInput').value = movie.capacityTotal || '';
       document.getElementById('posterUrl').value = movie.posterUrl || '';
@@ -182,6 +189,7 @@
       date: document.getElementById('dateInput').value,
       time: document.getElementById('timeInput').value,
       venue: document.getElementById('venueInput').value.trim(),
+      trailerUrl: document.getElementById('trailerInput').value.trim(),
       pricePerTicket: Number(document.getElementById('priceInput').value),
       capacityTotal: Number(document.getElementById('capacityInput').value),
       posterUrl: document.getElementById('posterUrl').value,
@@ -219,3 +227,4 @@
 
   load();
 })();
+
