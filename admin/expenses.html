@@ -27,24 +27,33 @@
       <button type="button" id="applyDateFilterBtn" class="btn btn-secondary btn-sm">Apply</button>
       <button type="button" id="clearDateFilterBtn" class="btn btn-secondary btn-sm">Clear</button>
     </div>
+    <p class="muted" id="dateFilterHint" style="margin-top:0.5rem; margin-bottom:0;" hidden>This date range only narrows which expenses are counted below — paid revenue and refunds are totals you enter for the whole movie.</p>
   </div>
 
   <div id="noMovieMessage" class="state-message">Select a movie above to see its financial summary and expenses.</div>
 
   <div id="financeContent" hidden>
     <div class="card">
+      <h2 class="section-title">Revenue</h2>
+      <p class="muted" style="margin-top:-0.5rem;">Enter this movie's totals by hand. Everything below (owner's share, our share, net profit) calculates automatically from what you enter here plus the expenses you've logged.</p>
+
+      <div class="field">
+        <label for="manualPaidRevenueInput">Paid ticket revenue (MVR)</label>
+        <input type="number" id="manualPaidRevenueInput" min="0" step="0.01" value="0">
+      </div>
+      <div class="field">
+        <label for="manualRefundedInput">Refunded amount (MVR)</label>
+        <input type="number" id="manualRefundedInput" min="0" step="0.01" value="0">
+      </div>
+      <p id="revenueSaveError" class="field-error" role="alert" hidden></p>
+      <button type="button" id="saveRevenueBtn" class="btn btn-primary btn-sm">Save revenue figures</button>
+    </div>
+
+    <div class="card">
       <h2 class="section-title">Financial summary</h2>
       <div id="financeLoading" class="state-message" role="status" style="padding:1rem;">Loading…</div>
 
       <div id="financeStats" class="stat-grid" hidden>
-        <div class="stat-tile">
-          <span class="stat-value" id="statPaidRevenue">—</span>
-          <span class="stat-label">Paid ticket revenue</span>
-        </div>
-        <div class="stat-tile">
-          <span class="stat-value" id="statRefunded">—</span>
-          <span class="stat-label">Refunded amount</span>
-        </div>
         <div class="stat-tile">
           <span class="stat-value" id="statEligible">—</span>
           <span class="stat-label">Eligible revenue</span>
@@ -149,4 +158,3 @@
 <script src="/admin/js/expenses.js"></script>
 </body>
 </html>
-

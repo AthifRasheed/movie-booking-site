@@ -9,6 +9,7 @@
 
   const movieSelect = document.getElementById('movieSelect');
   const dateFilters = document.getElementById('dateFilters');
+  const dateFilterHint = document.getElementById('dateFilterHint');
   const dateFromInput = document.getElementById('dateFromInput');
   const dateToInput = document.getElementById('dateToInput');
   const applyDateFilterBtn = document.getElementById('applyDateFilterBtn');
@@ -16,6 +17,11 @@
 
   const noMovieMessage = document.getElementById('noMovieMessage');
   const financeContent = document.getElementById('financeContent');
+
+  const manualPaidRevenueInput = document.getElementById('manualPaidRevenueInput');
+  const manualRefundedInput = document.getElementById('manualRefundedInput');
+  const saveRevenueBtn = document.getElementById('saveRevenueBtn');
+  const revenueSaveError = document.getElementById('revenueSaveError');
 
   const financeLoading = document.getElementById('financeLoading');
   const financeStats = document.getElementById('financeStats');
@@ -40,6 +46,7 @@
   let selectedMovie = null;
   let dateFrom = '';
   let dateTo = '';
+  let currentTotalExpenses = 0;
 
   function money(n) {
     return 'MVR ' + (Number(n) || 0).toFixed(2);
@@ -81,14 +88,19 @@
 
     if (!selectedMovie) {
       dateFilters.hidden = true;
+      dateFilterHint.hidden = true;
       noMovieMessage.hidden = false;
       financeContent.hidden = true;
       return;
     }
 
     dateFilters.hidden = false;
+    dateFilterHint.hidden = false;
     noMovieMessage.hidden = true;
     financeContent.hidden = false;
+    revenueSaveError.hidden = true;
+    manualPaidRevenueInput.value = Number(selectedMovie.manualPaidRevenue) || 0;
+    manualRefundedInput.value = Number(selectedMovie.manualRefundedAmount) || 0;
     loadAll();
   }
 
@@ -109,37 +121,25 @@
   }
 
   // ---- Financial summary ----
-  // Revenue rule (confirmed 2026-09-21): only paymentStatus=Paid AND bookingStatus=Confirmed
-  // bookings count. A booking that was Paid then later Cancelled is excluded entirely —
-  // there is no refund record in this app to net it against instead.
+  // Revenue (changed 2026-09-22): paid ticket revenue and refunded amount are now entered
+  // by hand per movie (stored on the Movie row as manualPaidRevenue / manualRefundedAmount,
+  // saved via the existing 'updateMovie' action) instead of being summed from bookings.
+  // Everything else — eligible revenue, owner's share, our share, net profit — still
+  // calculates automatically from those two numbers plus the logged expenses.
 
   function loadFinancials() {
     financeLoading.hidden = false;
     financeStats.hidden = true;
     financeBreakdown.hidden = true;
 
-    Promise.all([
-      apiFetch('/api/admin/bookings?movieId=' + encodeURIComponent(selectedMovie.id) + '&bookingStatus=Confirmed&paymentStatus=Paid'),
-      apiFetch('/api/admin/expenses?movieId=' + encodeURIComponent(selectedMovie.id) + (dateFrom ? '&dateFrom=' + encodeURIComponent(dateFrom) : '') + (dateTo ? '&dateTo=' + encodeURIComponent(dateTo) : '')),
-    ])
-      .then(([bookings, expenses]) => {
-        const filteredBookings = bookings.filter((b) => {
-          const d = String(b.createdAt || '').slice(0, 10);
-          if (dateFrom && d < dateFrom) return false;
-          if (dateTo && d > dateTo) return false;
-          return true;
-        });
+    const params = new URLSearchParams({ movieId: selectedMovie.id });
+    if (dateFrom) params.set('dateFrom', dateFrom);
+    if (dateTo) params.set('dateTo', dateTo);
 
-        const paidRevenue = filteredBookings.reduce((sum, b) => sum + (Number(b.totalAmount) || 0), 0);
-        const totalExpenses = expenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
-
-        // Refunds aren't tracked anywhere in this app yet — see admin/js/financials.js
-        // for exactly why this is 0 rather than omitted.
-        const result = MovieFinancials.computeMovieFinancials({
-          paidRevenue, refundedRevenue: 0, expenses: totalExpenses,
-        });
-
-        renderFinancials(result);
+    apiFetch('/api/admin/expenses?' + params.toString())
+      .then((expenses) => {
+        currentTotalExpenses = expenses.reduce((sum, e) => sum + (Number(e.amount) || 0), 0);
+        recalcFromInputs();
         financeLoading.hidden = true;
         financeStats.hidden = false;
         financeBreakdown.hidden = false;
@@ -149,9 +149,54 @@
       });
   }
 
+  function recalcFromInputs() {
+    const paidRevenue = Number(manualPaidRevenueInput.value) || 0;
+    const refundedRevenue = Number(manualRefundedInput.value) || 0;
+    const result = MovieFinancials.computeMovieFinancials({
+      paidRevenue, refundedRevenue, expenses: currentTotalExpenses,
+    });
+    renderFinancials(result);
+  }
+
+  manualPaidRevenueInput.addEventListener('input', recalcFromInputs);
+  manualRefundedInput.addEventListener('input', recalcFromInputs);
+
+  saveRevenueBtn.addEventListener('click', () => {
+    revenueSaveError.hidden = true;
+    const paidRevenue = Number(manualPaidRevenueInput.value);
+    const refundedRevenue = Number(manualRefundedInput.value);
+    if (!(paidRevenue >= 0)) return showRevenueError('Paid revenue must be zero or more.');
+    if (!(refundedRevenue >= 0)) return showRevenueError('Refunded amount must be zero or more.');
+
+    saveRevenueBtn.disabled = true;
+    saveRevenueBtn.textContent = 'Saving…';
+    apiFetch('/api/admin/movies/' + encodeURIComponent(selectedMovie.id), {
+      method: 'PUT',
+      body: JSON.stringify({ manualPaidRevenue: paidRevenue, manualRefundedAmount: refundedRevenue }),
+    })
+      .then(() => {
+        selectedMovie.manualPaidRevenue = paidRevenue;
+        selectedMovie.manualRefundedAmount = refundedRevenue;
+        const cached = allMovies.find((m) => m.id === selectedMovie.id);
+        if (cached) {
+          cached.manualPaidRevenue = paidRevenue;
+          cached.manualRefundedAmount = refundedRevenue;
+        }
+        showToast('Revenue figures saved.');
+      })
+      .catch((err) => showRevenueError(err.message || 'Could not save.'))
+      .finally(() => {
+        saveRevenueBtn.disabled = false;
+        saveRevenueBtn.textContent = 'Save revenue figures';
+      });
+  });
+
+  function showRevenueError(message) {
+    revenueSaveError.textContent = message;
+    revenueSaveError.hidden = false;
+  }
+
   function renderFinancials(r) {
-    document.getElementById('statPaidRevenue').textContent = money(r.paidRevenue);
-    document.getElementById('statRefunded').textContent = money(r.refundedRevenue);
     document.getElementById('statEligible').textContent = money(r.eligibleRevenue);
     document.getElementById('statOwnerShare').textContent = money(r.ownerShare);
     document.getElementById('statOurShare').textContent = money(r.ourShareBeforeExpenses);
@@ -362,4 +407,3 @@
     formError.hidden = false;
   }
 })();
-
