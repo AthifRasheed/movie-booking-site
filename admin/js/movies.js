@@ -18,6 +18,19 @@
   let allMovies = [];
   let currentTab = 'active';
 
+  // Sets a form field's value only if that field actually exists on the page.
+  // Some fields (like a trailer link) may have been removed from movies.html
+  // in an earlier change without this file being updated to match — without
+  // this guard, a single missing field crashes the whole Add/Edit form.
+  function setFieldValue(id, value) {
+    const el = document.getElementById(id);
+    if (el) el.value = value;
+  }
+  function getFieldValue(id) {
+    const el = document.getElementById(id);
+    return el ? el.value : '';
+  }
+
   function load() {
     loading.hidden = false;
     errorEl.hidden = true;
@@ -127,28 +140,28 @@
     formError.hidden = true;
     posterPreview.hidden = true;
     uploadProgress.hidden = true;
-    document.getElementById('posterUrl').value = '';
-    document.getElementById('posterPublicId').value = '';
+    setFieldValue('posterUrl', '');
+    setFieldValue('posterPublicId', '');
 
     if (movie) {
       formTitle.textContent = 'Edit Movie';
-      document.getElementById('movieId').value = movie.id;
-      document.getElementById('titleInput').value = movie.title || '';
-      document.getElementById('dateInput').value = movie.date || '';
-      document.getElementById('timeInput').value = movie.time || '';
-      document.getElementById('venueInput').value = movie.venue || '';
-      document.getElementById('trailerInput').value = movie.trailerUrl || '';
-      document.getElementById('priceInput').value = movie.pricePerTicket || '';
-      document.getElementById('capacityInput').value = movie.capacityTotal || '';
-      document.getElementById('posterUrl').value = movie.posterUrl || '';
-      document.getElementById('posterPublicId').value = movie.posterPublicId || '';
+      setFieldValue('movieId', movie.id);
+      setFieldValue('titleInput', movie.title || '');
+      setFieldValue('dateInput', movie.date || '');
+      setFieldValue('timeInput', movie.time || '');
+      setFieldValue('venueInput', movie.venue || '');
+      setFieldValue('trailerInput', movie.trailerUrl || '');
+      setFieldValue('priceInput', movie.pricePerTicket || '');
+      setFieldValue('capacityInput', movie.capacityTotal || '');
+      setFieldValue('posterUrl', movie.posterUrl || '');
+      setFieldValue('posterPublicId', movie.posterPublicId || '');
       if (movie.posterUrl) {
         posterPreview.src = posterVariant(movie.posterUrl, 240);
         posterPreview.hidden = false;
       }
     } else {
       formTitle.textContent = 'Add Movie';
-      document.getElementById('movieId').value = '';
+      setFieldValue('movieId', '');
     }
     panel.hidden = false;
   }
@@ -179,15 +192,15 @@
     formError.hidden = true;
 
     const payload = {
-      title: document.getElementById('titleInput').value.trim(),
-      date: document.getElementById('dateInput').value,
-      time: document.getElementById('timeInput').value,
-      venue: document.getElementById('venueInput').value.trim(),
-      trailerUrl: document.getElementById('trailerInput').value.trim(),
-      pricePerTicket: Number(document.getElementById('priceInput').value),
-      capacityTotal: Number(document.getElementById('capacityInput').value),
-      posterUrl: document.getElementById('posterUrl').value,
-      posterPublicId: document.getElementById('posterPublicId').value,
+      title: getFieldValue('titleInput').trim(),
+      date: getFieldValue('dateInput'),
+      time: getFieldValue('timeInput'),
+      venue: getFieldValue('venueInput').trim(),
+      trailerUrl: getFieldValue('trailerInput').trim(),
+      pricePerTicket: Number(getFieldValue('priceInput')),
+      capacityTotal: Number(getFieldValue('capacityInput')),
+      posterUrl: getFieldValue('posterUrl'),
+      posterPublicId: getFieldValue('posterPublicId'),
     };
 
     if (!payload.title) return showFormError('Title is required.');
