@@ -8,7 +8,6 @@
     { href: '/admin/dashboard.html', label: 'Dashboard', key: 'dashboard' },
     { href: '/admin/movies.html', label: 'Movies', key: 'movies' },
     { href: '/admin/bookings.html', label: 'Bookings', key: 'bookings' },
-    { href: '/admin/expenses.html', label: 'Expenses', key: 'expenses' },
     { href: '/admin/settings.html', label: 'Settings', key: 'settings' },
   ];
 
@@ -34,4 +33,3 @@
 
   wireLogout();
 })();
-

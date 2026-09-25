@@ -100,12 +100,6 @@
     archiveBtn.addEventListener('click', () => updateMovie(movie.id, { status: movie.status === 'archived' ? 'active' : 'archived' }, archiveBtn));
     actions.appendChild(archiveBtn);
 
-    const financesLink = document.createElement('a');
-    financesLink.className = 'btn btn-secondary btn-sm';
-    financesLink.href = '/admin/expenses.html?movie=' + encodeURIComponent(movie.id);
-    financesLink.textContent = 'Finances';
-    actions.appendChild(financesLink);
-
     row.appendChild(body);
     return row;
   }
@@ -227,4 +221,3 @@
 
   load();
 })();
-

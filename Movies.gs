@@ -63,18 +63,14 @@ function updateMovie_(payload) {
   const target = rowsToObjects_(sheet).find(function (r) { return r.id === payload.id; });
   if (!target) throw new Error('Movie not found');
 
-  const editable = ['title', 'posterUrl', 'posterPublicId', 'date', 'time', 'venue', 'trailerUrl', 'pricePerTicket', 'capacityTotal', 'bookingsOpen', 'status', 'manualPaidRevenue', 'manualRefundedAmount'];
+  const editable = ['title', 'posterUrl', 'posterPublicId', 'date', 'time', 'venue', 'trailerUrl', 'pricePerTicket', 'capacityTotal', 'bookingsOpen', 'status'];
   editable.forEach(function (field) {
     if (payload[field] === undefined) return;
-    if (map[field] === undefined) throw new Error('Sheet is missing the "' + field + '" column — add it to the Movies tab header row first.');
     let value = payload[field];
     if (field === 'title' || field === 'venue' || field === 'time') value = sanitizeText_(value, 200);
     if (field === 'trailerUrl') value = sanitizeText_(value, 300);
     if (field === 'posterUrl' || field === 'posterPublicId') value = sanitizeText_(value, 500);
-    if (field === 'pricePerTicket' || field === 'capacityTotal' || field === 'manualPaidRevenue' || field === 'manualRefundedAmount') {
-      value = Number(value);
-      if (!isFinite(value) || value < 0) throw new Error('"' + field + '" must be zero or a positive number.');
-    }
+    if (field === 'pricePerTicket' || field === 'capacityTotal') value = Number(value);
     sheet.getRange(target._row, map[field] + 1).setValue(value);
   });
   sheet.getRange(target._row, map['updatedAt'] + 1).setValue(nowIso_());
